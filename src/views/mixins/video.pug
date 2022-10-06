@@ -1,4 +1,16 @@
+//- video mixin 안의 video가 될 것이고 각각 video.~적혀있을 것.
 mixin video(video)
+    a(href=`/videos/${video.id}`).video-mixin
+        if
+            img(src=video.thumbUrl crossorigin).video-mixin__thumb
+        else
+            img(src=`/${video.thumbUrl}`).video-mixin__thumb
+        div.video-mixin__data
+            span.video-mixin__title=video.title
+            div.video-mixin__meta
+                span #{video.owner.username} • 
+                span #{video.meta.views} 회
+//mixin video(video)
     a(href=`/videos/${video.id}`).video-mixin
         div.video-mixin__thumb(style=`background-image:url(${video.thumbUrl});background-size:cover;background-position:center;`)
         div.video-mixin__data
