@@ -67,12 +67,13 @@ export const postUpload = async (req, res) => {
   } = req.session;
   const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
+  const isHeroku = process.env.NODE_ENV === "production";
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: video[0].location,
-      thumbUrl: thumb[0].location,
+      fileUrl: isHeroku ? video[0].location : video[0].path,
+      thumbUrl: isHeroku ? thumb[0].location : video[0].path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });
@@ -158,6 +159,23 @@ export const createComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   const {
+    session: { user },
+    params: { id: commentId },
+  } = req;
+  const comment = await Comment.findById(commentId)
+    .populate("video")
+    .populate("owner");
+  if (!comment) {
+    return res.sendStatus(404);
+  }
+  if (String(user._id) !== String(comment.owner.id)) {
+    return res.status(403).redirect("/");
+  }
+  await Comment.findByIdAndDelete(commentId);
+  return res.status("200").redirect(`/videos/${comment.video._id}`);
+};
+/*export const deleteComment = async (req, res) => {
+  const {
     session: {
       user: { _id },
     },
@@ -179,4 +197,4 @@ export const deleteComment = async (req, res) => {
   await Comment.findByIdAndDelete(commentId);
 
   return res.sendStatus(200);
-};
+};*/
