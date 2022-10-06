@@ -1,14 +1,13 @@
 extends base
-
 block content
     div#videoContainer(data-id=video._id)
-        video(src=video.fileUrl crossorigin)
+        video(src= video.fileUrl, crossorigin)
         div#videoControls.videoControls
             div.videoControls__play
                 span#play.videoControls__playBtn
                     i.fas.fa-play
                 div.videoControls__time
-                    span#currenTime 00:00
+                    span#currentTime 00:00
                     span  / 
                     span#totalTime 00:00
             input(type="range",step="1", value="0", min="0")#timeline.videoControls__timeline
@@ -19,7 +18,6 @@ block content
             div
                 span#fullScreen
                     i.fas.fa-expand
- 
     div.video__data
         p.video__title=video.title
         small.video__owner Uploaded by 
@@ -34,15 +32,16 @@ block content
             form.video__comment-form#commentForm
                 textarea(cols="30", rows="10", placeholder="Write a nice commment...")
                 button Add Comment
-    div.video__comments
-        ul
+    div.video__comments#commentDiv
+        ul  
             each comment in video.comments.reverse()
-                 li.video__comment(data-id=comment.id)
-                    i.fas.fa-comment
-                    span  #{comment.text}   
-                    if String(loggedInUser._id) === String(comment.owner._id)
-                            span#delete__comment ❌
-block scripts
-    script(src="/static/js/videoPlayer.js")
+                li.video__comment(data-id=comment._id)
+                    i.fas.fa-comment 
+                    span  #{comment.text}
+                    if String(comment.owner._id) === String(loggedInUser._id)
+                        span.delete__comment ❌
+block scripts   
+    script(src="/assets/js/videoPlayer.js")
     if loggedIn
-        script(src="/static/js/commentSection.js")
+        script(src="/assets/js/commentSection.js")
+
