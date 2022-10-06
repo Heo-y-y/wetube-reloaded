@@ -1,4 +1,3 @@
-//- video mixin 안의 video가 될 것이고 각각 video.~적혀있을 것.
 mixin video(video)
     a(href=`/videos/${video.id}`).video-mixin
         if /^https?:\/\//.test(video.thumbUrl)
