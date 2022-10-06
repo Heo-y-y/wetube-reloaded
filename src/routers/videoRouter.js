@@ -1,17 +1,17 @@
 import express from "express";
 import {
-  watch,
-  getUpload,
+  see,
   getEdit,
   postEdit,
+  getUpload,
   postUpload,
-  deleteVideo,
-} from "../controllers/videoController";
-import { protectorMiddleware, videoUpload } from "../middlewares";
+  getDelete,
+} from "../controller/videoController";
+import { protectorMiddleware, videoUpload } from "../middleware";
 
 const videoRouter = express.Router();
 
-videoRouter.get("/:id([0-9a-f]{24})", watch);
+videoRouter.get("/:id([0-9a-f]{24})", see);
 videoRouter
   .route("/:id([0-9a-f]{24})/edit")
   .all(protectorMiddleware)
@@ -20,7 +20,7 @@ videoRouter
 videoRouter
   .route("/:id([0-9a-f]{24})/delete")
   .all(protectorMiddleware)
-  .get(deleteVideo);
+  .get(getDelete);
 videoRouter
   .route("/upload")
   .all(protectorMiddleware)
