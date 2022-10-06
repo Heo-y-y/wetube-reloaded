@@ -8,8 +8,10 @@ import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 import { localsMiddleware } from "./middlewares";
 import apiRouter from "./routers/apiRouter";
+
 const app = express();
 const loggerMiddleware = morgan("dev");
+
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 /*app.use((req, res, next) => {
@@ -20,9 +22,15 @@ app.set("views", process.cwd() + "/src/views");
   );
   next();
 });*/
+app.use(logger);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
 app.use((req, res, next) => {
   res.header("Cross-Origin-Embedder-Policy", "require-corp");
   res.header("Cross-Origin-Opener-Policy", "same-origin");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
   next();
 }); // ffmpeg할 때 오류 방지 코드
 app.use(loggerMiddleware);
